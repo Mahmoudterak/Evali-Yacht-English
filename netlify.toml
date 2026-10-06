@@ -1,0 +1,63 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Redirect old yacht URLs to new format (preserves SEO)
+[[redirects]]
+  from = "/yachts/:slug"
+  to = "/yacht/:slug"
+  status = 301
+  force = true
+
+# Serve prerendered yacht detail pages
+[[redirects]]
+  from = "/yacht/*"
+  to = "/yacht/:splat.html"
+  status = 200
+  force = false
+
+# Serve prerendered service detail pages  
+[[redirects]]
+  from = "/services/*"
+  to = "/services/:splat.html"
+  status = 200
+  force = false
+
+# Serve prerendered blog detail pages
+[[redirects]]
+  from = "/blog/*"
+  to = "/blog/:splat.html"
+  status = 200
+  force = false
+
+# Serve prerendered HTML files first
+[[redirects]]
+  from = "/*"
+  to = "/:splat.html"
+  status = 200
+  force = false
+
+# Fallback to index.html for client-side routing (only if no .html file exists)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+  
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
